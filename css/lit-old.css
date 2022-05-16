@@ -1,0 +1,320 @@
+:root {
+    --primary-text-color: red;
+}
+
+body {
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+    font-size: 16px;
+    color: rgb(235, 235, 235);
+    background-color: rgb(20, 20, 20);
+
+    margin: 0px;
+    padding: 0px;
+}
+* {
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+    box-sizing: border-box;
+}
+
+.input {
+    padding: 12px;
+    border: 2px solid white;
+    background-color: rgb(30, 30, 30);
+    color: white;
+    width: 100%;
+}
+textarea.input {
+    min-height: 200px;
+}
+
+.button {
+    font-size: 14px;
+    border: 2px solid rgb(90, 90, 90);
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: rgb(50, 50, 50);
+    color: rgb(219, 219, 219);
+    text-transform: uppercase;
+    width: 60px;
+    height: 60px;
+    fill: rgb(219, 219, 219);
+}
+.button:hover {
+    cursor: pointer;
+    background-color: rgb(62, 60, 67);
+}
+.button-blue {
+    background-color: rgb(62, 90, 103);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.header-main {
+    background-color: rgb(70, 70, 70);
+    padding: 12px;
+}
+.header-main div {
+    display: inline-block;
+    vertical-align: middle;
+}
+.header-main span {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#main_navigation {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(6, min-content);
+    grid-gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+#main_navigation #title {
+    margin-right: 20px;
+    font-weight: bold;
+}
+.main_navigation-item.button {
+    display: flex;
+    align-items: center;
+}
+.main_navigation-item:hover {
+    cursor: pointer;
+}
+.main_navigation-item a {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    width: 32px;
+}
+
+#body_wrap {
+    min-width: 360px;
+    padding: 5px;
+    width: 100%;
+}
+
+.hoverable:hover {
+    cursor:  pointer;
+}
+
+#lit_body lit-wc[as], #lit_body lit-chalkboard-wc[as] {
+    display: block;
+    margin-bottom: 0px;
+    padding: 5px;
+}
+#lit_body lit-wc[as]:hover, #lit_body lit-chalkboard-wc[as]:hover {
+    cursor: pointer;
+    background-color: rgb(50, 50, 50);
+}
+#lit_body lit-wc[as=h1] {
+    font-size: 32px;
+}
+#lit_body lit-wc[as=h2] {
+    font-size: 30px;
+}
+#lit_body lit-wc[as=h3] {
+    font-size: 28px;
+}
+#lit_body lit-wc[as=h4] {
+    font-size: 24px;
+}
+#lit_body lit-wc[as=h5] {
+    font-size: 20px;
+}
+#lit_body lit-wc[as=h6] {
+    font-size: 18px;
+}
+#lit_body lit-wc[as=group] {
+    min-height: 20px;
+    border-left: 5px solid pink;
+    padding-left: 5px;
+}
+#lit_body lit-wc[as=group]:hover {
+    cursor: pointer;
+    background-color: rgb(30, 30, 30);
+}
+#lit_body lit-wc[as=link] {
+    display: inline-block;
+    color: pink;
+    margin-bottom: 0px;
+}
+#lit_body lit-wc[as=variable] {
+    display: inline-block;
+    color: yellow;
+    margin-bottom: 0px;
+}
+
+#lit_variables lit-variable-wc {
+    display: block;
+    width: 100%;
+    min-width: 200px;
+    min-height: 12px;
+    padding: 10px;
+}
+#lit_variables lit-variable-wc:hover {
+    cursor: pointer;
+    background-color: rgb(30, 30, 30);
+}
+
+#lit_outputs lit-output-wc {
+    display: block;
+    width: 100%;
+    min-width: 200px;
+    min-height: 12px;
+    padding: 10px;
+}
+#lit_outputs lit-output-wc:hover {
+    cursor: pointer;
+    background-color: rgb(30, 30, 30);
+}
+
+
+/** These will end up directly affecting the inside of custom web components **/
+#render {
+    width: 100%;
+    min-height: 12px;
+    overflow-wrap: anywhere;
+    overflow-x: auto;
+    padding: 10px 15px;
+}
+#render.groups-1 {
+    border-left: 5px solid pink;
+    padding-left: 5px;
+    margin-bottom: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#render.groups-2 {
+    border-left: 10px solid pink;
+    padding-left: 5px;
+    margin-bottom: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#render.groups-3 {
+    border-left: 15px solid pink;
+    padding-left: 5px;
+    margin-bottom: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#information {
+    display: grid;
+    grid-auto-flow: row;
+    background-color: rgb(50, 50, 50);
+    padding: 12px;
+    /*grid-template-columns: repeat(9, max-content);*/
+    grid-gap: 12px;
+    font-size: 16px;
+}
+#information div {
+    border: 2px solid #5e5b5b;
+    padding: 12px;
+}
+#render #chalkboard-wrapper {
+    width: 100%;
+    height: 200px;
+    position: relative;
+}
+#render canvas {
+    border: 2px solid pink;
+    position: absolute;
+    z-index: 1;
+    left: 0px;
+    top: 0px;
+}
+#render #chalkboard-controls {
+    display: grid;
+    grid-template-columns: repeat(6, min-content);
+    grid-gap: 10px;
+    align-items: center;
+    width: 100%;
+    overflow-x: auto;
+    padding: 10px;
+}
+#render table {
+    width: 100%;
+    min-width: 600px;
+    overflow-x: auto;
+    background-color: rgb(30, 30, 30);
+}
+#render table tr td.row-header-item {
+    font-weight: bold;
+    font-size: 18px;
+}
+#render table tr td {
+    padding: 10px;
+}
+#render table tr td.active {
+    border: 1px solid gold;
+}
+pre {
+    padding: 10px;
+    margin: 0px;
+    overflow-x: scroll;
+    font-family: Consolas;
+}
+code {
+    font-family: Consolas;
+}
+
+#edit-form > div {
+    padding: 12px;
+}
+#edit-form > div > div:nth-child(1) {
+    margin-bottom: 12px;
+}
+
+
+.floating-menu {
+    position: absolute;
+    margin-top: -50px;
+    z-index: 3;
+    background-color: #2d2929;
+    color: #dedede;
+    padding: 6px 6px;
+    border: 2px solid #aeaeae;
+    /*font-weight: bold;*/
+    font-size: 16px;
+    line-height: 9px;
+    fill: #dedede;
+}
+.floating-menu.fm-2 {
+    margin-left: 50px;
+}
+.floating-menu.fm-3 {
+    margin-left: 254px;
+}
+.floating-menu.fm-4 {
+    margin-left: 373px;
+}
+.floating-menu-item:hover {
+    cursor: pointer;
+    background-color: #444444;
+}
+.floating-menu-item.inactive:hover {
+    cursor: default;
+    background-color: #2d2929;
+}
+.floating-menu-item {
+    padding: 15px;
+}
+.floating-menu-item.active {
+    background-color: #454545;
+}
+.floating-menu-item.inactive {
+    color: rgb(156, 156, 156);
+}
+.floating-menu-item.linethrough {
+    text-decoration: line-through;
+}
+#render li.active {
+    border: 2px solid gold;
+}
