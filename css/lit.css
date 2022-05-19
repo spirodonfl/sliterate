@@ -11,6 +11,10 @@ a {
     color: rgb(150, 150, 200);
 }
 
+.hidden {
+    display: none;
+}
+
 #wrapper {
     display: grid;
     grid-auto-flow: row;
@@ -19,6 +23,17 @@ a {
     grid-row-gap: 30px;
     height: 100%;
     overflow-y: auto;
+}
+
+#menu {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px;
+    grid-template-columns: repeat(9, max-content);
 }
 
 #markdown {
@@ -30,11 +45,11 @@ a {
     overflow-y: auto;
 }
 
-#markdown-source {
+#markdown_source {
     background-color: rgb(40, 40, 40);
     color: rgb(200, 200, 200);
 }
-#markdown-preview {
+#markdown_preview {
     overflow-y: auto;
 }
 

@@ -3,7 +3,7 @@
 // If you do that, can you deep resolve references into the file you are currently dealing with?
 
 var fs = require("fs");
-var path = require("path");
+// var path = require("path");
 var readline = require("readline");
 var UTILS = require("./js/utils.js");
 var Regexes = require("./js/regexes.js");

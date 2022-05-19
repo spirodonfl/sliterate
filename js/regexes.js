@@ -22,6 +22,8 @@ var Regexes = {
     // Should just be a raw JSON string.
     // Useful if you need to have extra stuff in the file but do not want it rendered
     metadata: /\[_json_metadata\]\:\-\s\'(.*)\'$/m,
+
+    main_directory: /^\[lit_main_directory\]\:(.*)/,
 };
 
 if (typeof module !== "undefined") {
