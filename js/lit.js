@@ -11,6 +11,7 @@
 // TODO: If there are references to other files inside a loaded markdown file then apply a directory path reference to the rendered link so you can actually click on the link and go to the file. Example: if you reference ./somefile.pdf then add http://localhost:8000/open?file=somefile.pdf&directory=/some/directory and node_lit_server will go reach out and pull the file and open it for you
 // TODO: Because offline mode & online mode got complicated, you now need to check (in offline mode) for two new parameters in the URL which are "port" and "host". This way, if you load an offline version but want to make requests to a running server, you can do so by going "index.html?port=9000&host=192.133.333.333". Use "window.location.protocol" to determine whether you're on "http" or "file" which tells you a local load or not
 // TODO: Would be good to display things like file and directory on the page so you know what you're working with
+// TODO: Allow online/server mode to update lit meta file records and notify you when metas are out of date (base64 compares). Probably best to do that server side and ship you the updated base64
 
 function requestFileResolution(litFile) {
     console.log("Requesting file:", litFile);
@@ -101,7 +102,6 @@ function saveFile() {
     if (params.file && params.directory) {
         console.log("Saving loaded file");
         var urlParams = new URLSearchParams({
-            // base64: window.btoa(encodeURIComponent(document.getElementById("markdown_source").value)),
             file: params.file,
             directory: params.directory,
         });
