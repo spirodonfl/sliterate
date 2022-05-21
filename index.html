@@ -6,31 +6,84 @@
         <link rel="stylesheet" href="css/css-media-vars.css">
         <link rel="stylesheet" href="css/lit.css">
         <link rel="stylesheet" href="css/highlight.11.5.0.css">
+        <link rel="stylesheet" href="css/highlight-dark-mode.css">
     </head>
     <body>
         
 <div id="wrapper">
     <div id="menu">
+        <ul id="menu_wrapper">
+            <li>
+                <button id="menu_file">File</button>
+                <ul class="hidden">
+                    <li><button id="load_file">Load File</button></li>
+                    <li><button id="save_file">Save File</button></li>
+                    <li><button id="load_metadata">Load Metadata</button></li>
+                    <li><button id="save_metadata">Save Metadata</button></li>
+                </ul>
+            </li>
+            <li>
+                <button id="menu_view">View</button>
+                <ul class="hidden">
+                    <li><button id="show_only_source">Only Source</button></li>
+                    <li><button id="show_only_preview">Only Preview</button></li>
+                    <li><button id="show_source_and_preview">Show Source & Preview</button></li>
+                </ul>
+            </li>
+            <li>
+                <button id="menu_edit">Edit</button>
+                <ul class="hidden">
+                    <li><button id="copy_source">Copy Source to Clipboard</button></li>
+                    <li><button id="check_file_references">Check File References</button></li>
+                    <li><button id="force_update_all_file_references">Force Update All File References</button></li>
+                </ul>
+            </li>
+            <a href="#" id="download_metadata">Download Metadata</a>
+        </ul>
         <input type="file" id="file_input" />
-        <button id="load_file">Load File</button>
-        <button id="save_file">Save File</button>
-        <button id="load_metadata">Load Metadata</button>
-        <button id="show_only_source">Show Only Source</button>
-        <button id="show_only_preview">Show Only Preview</button>
-        <button id="show_source_and_preview">Show Source & Preview</button>
-        <button id="copy_source">Copy Source to Clipboard</button>
     </div>
 
     <div id="markdown">
         <textarea id="markdown_source"></textarea>
         <div id="markdown_preview"></div>
     </div>
+
+    <template id="LitFileWC.html">
+        <link rel="stylesheet" href="css/highlight.11.5.0.css">
+        <link rel="stylesheet" href="css/highlight-dark-mode.css">
+        <script src="js/highlight.11.5.0.js"></script>
+        <style>
+            .button-cta {
+                text-decoration: underline;
+            }
+            .button-cta:hover {
+                cursor: pointer;
+            }
+            .hidden {
+                display: none;
+            }
+            #wrapper {
+                padding: 8px;
+                border: 2px solid #e07373;
+            }
+        </style>
+        <div id="wrapper">
+            <div id="cta"></div>
+            <div id="render"></div>
+        </div>
+    </template>
 </div>
 
         <script src="js/highlight.11.5.0.js"></script>
         <script src="js/marked.umd.js"></script>
         <script src="js/regexes.js"></script>
         <script src="js/ui-utils.js"></script>
+        
+        <script src="js/webcomponent-cache.js"></script>
+        <script src="js/webcomponent.js"></script>
+        <script src="js/webcomponent-lit-file.js"></script>
+
         <script src="js/lit.js"></script>
+
     </body>
 </html>

@@ -14,6 +14,7 @@ var css = {
     mediaVars: "css/css-media-vars.css",
     lit: "css/lit.css",
     highlight: "css/highlight.11.5.0.css",
+    highlightDark: "css/highlight-dark-mode.css",
 };
 
 var html = {
@@ -34,6 +35,7 @@ var js = {
     webcomponentCache: "js/webcomponent-cache.js",
     webcomponent: "js/webcomponent.js",
     webcomponentLit: "js/webcomponent-lit.js",
+    webcomponentLitFile: "js/webcomponent-lit-file.js",
     webcomponentLitVariable: "js/webcomponent-lit-variable.js",
     webcomponentLitOutput: "js/webcomponent-lit-output.js",
     webcomponentLitChalkboard: "js/webcomponent-lit-chalkboard.js",

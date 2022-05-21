@@ -58,16 +58,16 @@ var requestListener = function (request, response) {
                         }
                     });
                     readlineInterface.on("close", function () {
-                        var base64 = toBase64(extracted);
-                        var encodedBase64 = encodeURIComponent(base64);
+                        var base64 = encodeURIComponent(extracted);
+                        var encodedBase64 = toBase64(base64);
                         response.writeHead(200, defaultHeaders);
                         response.write(encodedBase64);
                         response.end();
                     });
                 } else {
                     var wholeFile = fs.readFileSync(filePath, { encoding: "utf8" });
-                    var base64 = toBase64(wholeFile);
-                    var encodedBase64 = encodeURIComponent(base64);
+                    var base64 = encodeURIComponent(wholeFile);
+                    var encodedBase64 = toBase64(base64);
                     response.writeHead(200, defaultHeaders);
                     response.write(encodedBase64);
                     response.end();
@@ -97,20 +97,67 @@ var requestListener = function (request, response) {
             }
         }
     } else if (split[0] === "/save") {
+        // TODO: Better callbacks & mode detections (i.e: not getting body twice)
         if (queryObject.file && queryObject.directory) {
-            var body = "";
-            request.on("data", function (chunk) {
-                body += chunk.toString();
-            });
-            request.on("end", function () {
-                var unencoded = fromBase64(body);
-                unencoded = decodeURIComponent(unencoded);
-                fs.writeFileSync(queryObject.directory + "/" + queryObject.file, unencoded, { encoding: "utf8" });
+            if (queryObject.line_start && queryObject.line_end) {
+                var body = "";
+                request.on("data", function (chunk) {
+                    body += chunk.toString();
+                });
+                request.on("end", function () {
+                    var lineCursor = 0;
+                    var extracted = [];
+                    // TODO: This is weird, detecting directory vs main_directory
+                    var path = queryObject.directory + "/" + queryObject.file;
+                    if (!fs.existsSync(path)) {
+                        if (queryObject.directory !== "null") {
+                            path = queryObject.main_directory + "/" + queryObject.directory + "/" + queryObject.file;
+                        } else {
+                            path = queryObject.main_directory + "/" + queryObject.file;
+                        }
+                    }
+                    var readlineInterface = readline.createInterface({
+                        // TODO: Better file path detection including main_directory
+                        input: fs.createReadStream(path),
+                        output: process.stdout,
+                        terminal: false,
+                    });
+                    readlineInterface.on("line", function (line) {
+                        ++lineCursor;
+                        if (lineCursor === parseInt(queryObject.line_start)) {
+                            var unencoded = fromBase64(body);
+                            unencoded = decodeURIComponent(unencoded);
+                            extracted.push(unencoded);
+                        }
+                        if (lineCursor >= queryObject.line_start && lineCursor <= queryObject.line_end) {
+                            // ...
+                        } else {
+                            extracted.push(line);
+                        }
+                    });
+                    readlineInterface.on("close", function () {
+                        fs.writeFileSync(path, extracted.join("\n"), { encoding: "utf8" });
+                        response.writeHead(200, defaultHeaders);
+                        response.write("DONE");
+                        response.end();
+                    });
+                });
+            } else {
+                var body = "";
+                request.on("data", function (chunk) {
+                    body += chunk.toString();
+                });
+                request.on("end", function () {
+                    var unencoded = fromBase64(body);
+                    unencoded = decodeURIComponent(unencoded);
+                    // TODO: Better file path detection including main_directory
+                    fs.writeFileSync(queryObject.directory + "/" + queryObject.file, unencoded, { encoding: "utf8" });
 
-                response.writeHead(200, defaultHeaders);
-                response.write("DONE");
-                response.end();
-            });
+                    response.writeHead(200, defaultHeaders);
+                    response.write("DONE");
+                    response.end();
+                });
+            }
         } else {
             response.writeHead(500, defaultHeaders);
             response.write("Need file & directory");

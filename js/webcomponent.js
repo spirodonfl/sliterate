@@ -20,6 +20,7 @@ class WebComponent extends HTMLElement {
         super();
 
         this.hasBeenInitialized = false;
+        this.hasBeenRendered = false;
 
         this.urlsFetched = 0;
         this.model = {
@@ -86,29 +87,38 @@ class WebComponent extends HTMLElement {
             for (var i = 0; i < this.model.styleUrls.length; ++i) {
                 var styleUrl = this.model.styleUrls[i];
                 styleUrl = WebComponentCache.fetch(styleUrl, this);
-                this.applyStyle(styleUrl);
+                if (styleUrl) {
+                    this.applyStyle(styleUrl);
+                }
             }
             for (var i = 0; i < this.model.htmlUrls.length; ++i) {
                 var htmlUrl = this.model.htmlUrls[i];
                 htmlUrl = WebComponentCache.fetch(htmlUrl, this);
-                this.applyHtml(htmlUrl);
+                if (htmlUrl) {
+                    this.applyHtml(htmlUrl);
+                }
             }
             this.postInitialize();
         }
     }
 
     postInitialize() {
-        // if (!this.hasBeenInitialized) {
+        if (this.shadowMode) {
+            this.superRoot = this.attachShadow({ mode: this.shadowMode});
+        } else {
             this.superRoot = this.attachShadow({ mode: 'closed'});
-            this.superRoot.appendChild(this.root.content.cloneNode(true));
-            this.hasBeenInitialized = true;
-        // }
+        }
+        this.superRoot.appendChild(this.root.content.cloneNode(true));
+        this.hasBeenInitialized = true;
+        if (!this.hasBeenRendered) {
+            this.render();
+        }
     }
 
     connectedCallback() {
-        // if (!this.hasBeenInitialized) {
+        if (this.hasBeenInitialized) {
             this.render();
-        // }
+        }
     }
 
     render() {

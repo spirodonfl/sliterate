@@ -15,25 +15,63 @@ a {
     display: none;
 }
 
+button {
+    min-width: 60px;
+    height: 60px;
+    background: rgb(30, 30, 30);
+    color: rgb(200, 200, 200);
+    border-radius: 4px;
+    cursor: pointer;
+    border: 0px;
+    color: #ce34ce;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+button:hover {
+    background: rgb(50, 50, 50);
+}
+
 #wrapper {
     display: grid;
     grid-auto-flow: row;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
-    grid-row-gap: 30px;
+    grid-row-gap: 10px;
     height: 100%;
     overflow-y: auto;
 }
 
 #menu {
     width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
+    position: relative;
+}
+
+#menu > ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
     position: relative;
     display: grid;
     grid-auto-flow: column;
     grid-gap: 20px;
-    grid-template-columns: repeat(9, max-content);
+    grid-template-columns: repeat(3, min-content);
+}
+#menu > ul ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    z-index: 5;
+    background-color: rgb(50, 50, 50);
+    width: 180px;
+}
+#menu > ul ul li {
+    color: #eb7aeb;
+    height: 60px;
+}
+#menu > ul ul li button {
+    width: 100%;
+    text-align: left;
 }
 
 #markdown {
@@ -41,7 +79,7 @@ a {
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
-    grid-column-gap: 40px;
+    grid-column-gap: 20px;
     overflow-y: auto;
 }
 
@@ -51,17 +89,10 @@ a {
 }
 #markdown_preview {
     overflow-y: auto;
+    padding: 10px;
 }
 
-button {
-    min-width: 60px;
-    height: 60px;
-    border: 2px solid rgb(200, 200, 200);
-    background: rgb(30, 30, 30);
-    color: rgb(200, 200, 200);
-    border-radius: 4px;
-    cursor: pointer;
-}
+
 
 input#file_input {
     display: none;
