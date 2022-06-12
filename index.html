@@ -15,7 +15,7 @@
         <ul id="menu_wrapper">
             <li>
                 <button id="menu_file">File</button>
-                <ul class="hidden">
+                <ul class="hidden submenu-wrapper">
                     <li><button id="load_file">Load File</button></li>
                     <li><button id="save_file">Save File</button></li>
                     <li><button id="load_metadata">Load Metadata</button></li>
@@ -24,7 +24,7 @@
             </li>
             <li>
                 <button id="menu_view">View</button>
-                <ul class="hidden">
+                <ul class="hidden submenu-wrapper">
                     <li><button id="show_only_source">Only Source</button></li>
                     <li><button id="show_only_preview">Only Preview</button></li>
                     <li><button id="show_source_and_preview">Show Source & Preview</button></li>
@@ -32,7 +32,7 @@
             </li>
             <li>
                 <button id="menu_edit">Edit</button>
-                <ul class="hidden">
+                <ul class="hidden submenu-wrapper">
                     <li><button id="copy_source">Copy Source to Clipboard</button></li>
                     <li><button id="check_file_references">Check File References</button></li>
                     <li><button id="force_update_all_file_references">Force Update All File References</button></li>
@@ -73,6 +73,8 @@
         </div>
     </template>
 </div>
+
+        <script src="js/svg.js"></script>
 
         <script src="js/highlight.11.5.0.js"></script>
         <script src="js/marked.umd.js"></script>

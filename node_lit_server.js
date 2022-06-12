@@ -6,11 +6,11 @@ var readline = require("readline");
 
 var host = "0.0.0.0";
 var port = 8000;
-
+//LIT_TAG:general
 var defaultHeaders = {
     "Access-Control-Allow-Origin": "*"
 };
-
+//LIT_TAG:move_to_commonFunction
 function toBase64(string) {
     var buff = new Buffer.from(string, "utf8");
     return buff.toString("base64");
@@ -20,6 +20,8 @@ function fromBase64(string) {
     var buff = new Buffer.from(string, "base64");
     return buff.toString();
 }
+
+//LIT_TAG:move_to_commonFunction
 
 var requestListener = function (request, response) {
     var queryObject = url.parse(request.url, true).query;
@@ -55,6 +57,31 @@ var requestListener = function (request, response) {
                             if (lineCursor >= queryObject.line_start && lineCursor <= queryObject.line_end) {
                                 extracted += line + "\n";
                             }
+                        }
+                    });
+                    readlineInterface.on("close", function () {
+                        var base64 = encodeURIComponent(extracted);
+                        var encodedBase64 = toBase64(base64);
+                        response.writeHead(200, defaultHeaders);
+                        response.write(encodedBase64);
+                        response.end();
+                    });
+                } else if (queryObject.lit_tag) {
+                    var lineCursor = 0;
+                    var extracted = "";
+                    var triggered = false;
+                    var readlineInterface = readline.createInterface({
+                        input: fs.createReadStream(filePath),
+                        output: process.stdout,
+                        terminal: false,
+                    });
+                    readlineInterface.on("line", function (line) {
+                        ++lineCursor;
+                        if (line.match("//LIT_TAG:" + queryObject.lit_tag)) {
+                            triggered = !triggered;
+                        }
+                        if (triggered) {
+                            extracted += line + "\n";
                         }
                     });
                     readlineInterface.on("close", function () {
@@ -132,6 +159,52 @@ var requestListener = function (request, response) {
                         if (lineCursor >= queryObject.line_start && lineCursor <= queryObject.line_end) {
                             // ...
                         } else {
+                            extracted.push(line);
+                        }
+                    });
+                    readlineInterface.on("close", function () {
+                        fs.writeFileSync(path, extracted.join("\n"), { encoding: "utf8" });
+                        response.writeHead(200, defaultHeaders);
+                        response.write("DONE");
+                        response.end();
+                    });
+                });
+            } else if (queryObject.lit_tag) {
+                var body = "";
+                request.on("data", function (chunk) {
+                    body += chunk.toString();
+                });
+                request.on("end", function () {
+                    var lineCursor = 0;
+                    var extracted = [];
+                    var triggered = false;
+                    var hasBeenTriggered = false;
+                    // TODO: This is weird, detecting directory vs main_directory
+                    var path = queryObject.directory + "/" + queryObject.file;
+                    if (!fs.existsSync(path)) {
+                        if (queryObject.directory !== "null") {
+                            path = queryObject.main_directory + "/" + queryObject.directory + "/" + queryObject.file;
+                        } else {
+                            path = queryObject.main_directory + "/" + queryObject.file;
+                        }
+                    }
+                    var readlineInterface = readline.createInterface({
+                        // TODO: Better file path detection including main_directory
+                        input: fs.createReadStream(path),
+                        output: process.stdout,
+                        terminal: false,
+                    });
+                    readlineInterface.on("line", function (line) {
+                        ++lineCursor;
+                        if (line.match("//LIT_TAG:" + queryObject.lit_tag)) {
+                            triggered = !triggered;
+                        }
+                        if (triggered && !hasBeenTriggered) {
+                            var unencoded = fromBase64(body);
+                            unencoded = decodeURIComponent(unencoded);
+                            extracted.push(unencoded);
+                            hasBeenTriggered = true;
+                        } else if (!triggered) {
                             extracted.push(line);
                         }
                     });

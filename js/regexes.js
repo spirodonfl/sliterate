@@ -4,7 +4,7 @@ var Regexes = {
     // options: /([a-zA-Z0-9\-\_]+)=\"([a-zA-Z0-9\-\_\s\=\.\\\/]+)\"/g,
 
     // Below looks for [lit_file](/path/to/some/file.js?line_start=20&line_end=30)
-    anyFile: /^\[lit_file\]/g,
+    anyFile: /^\[lit_file\]\(.*\)$/g,
     urlParameters: /([^(?&]+)=([^)?&]+)/g,
     urlWithParameters: /(.*)\?(.*)/,
     justUrl: /\]\((.*)\?/,
@@ -13,12 +13,10 @@ var Regexes = {
     anyFileMeta: /^\[lit_file_meta\]\:/g,
     justFileMetaUrl: /\]\:(.*)\?/,
 
-    // TODO: Need to implement tags
     // Below looks for [lit_tags]:- "some,tags,here"
     anyTags: /^\[lit_tags\]\:\-/g,
     justTags: /\]\:\-\s"(.*)"/,
 
-    // TODO: Need to implement raw JSON strings
     // Should just be a raw JSON string.
     // Useful if you need to have extra stuff in the file but do not want it rendered
     metadata: /\[_json_metadata\]\:\-\s\'(.*)\'$/m,

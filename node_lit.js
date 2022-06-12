@@ -1,7 +1,3 @@
-// TODO: Investigate possibility of *nested* references
-// Right now, you *could*, in theory, reference another MD file which references other files
-// If you do that, can you deep resolve references into the file you are currently dealing with?
-
 var fs = require("fs");
 // var path = require("path");
 var readline = require("readline");
@@ -76,8 +72,6 @@ function findFileMeta(thisFile) {
 }
 
 function extractFile(thisFile) {
-    // TODO: if (thisFile.starts_with && thisFile.ends_with)
-    // TODO: if (thisFile.class && thisFile.method)
     var lineCursor = 0;
     var extracted = "";
     var path = thisFile.file;
@@ -114,10 +108,6 @@ function extractFile(thisFile) {
             if (fileMeta) {
                 if (fileMeta.base64 !== encodedBase64) {
                     console.log("File is out of date");
-                    // TODO: Sometimes you may have metadata in the MD file + an extra file
-                    // In those cases, you must reconcile the two (ask the user to do this)
-                    // Also, you must identify WHICH metadata is out of date
-                    // This is so the user knows whether it's the single file or the extra file that's causing sync issues
                     console.log("File: " + fileMeta.file);
                     if (fileMeta.directory) {
                         console.log("Directory: " + fileMeta.directory);
@@ -159,7 +149,6 @@ function processedFile() {
         readlineInterface.on("close", function (line) {
             if (options.singleFile) {
                 var newOutput = aboveMeta + "\n";
-                // TODO: You are using this twice. Put into a function.
                 for (var m = 0; m < metas.length; ++m) {
                     var metaString = "[lit_file_meta]:";
                     metaString += metas[m].file;

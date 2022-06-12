@@ -1,3 +1,29 @@
 {
-    "main_directory": "/mnt/c/Users/spiro/D/snotes/lit_files/test_files"
+"main_directory":"/mnt/c/Users/spiro/D/snotes/lit_files/test_files",
+"file_metas":[
+{
+"file":"somefile.js",
+"line_start":"2",
+"line_end":"5",
+"base64":"aWYlMjAoYWJjJTIwJTNEJTNEJTNEJTIwdHJ1ZSklMjAlN0IlMEElMjAlMjAlMjAlMjBjb25zb2xlLmxvZyglMjJBQkMlMjBJUyUyMFRSVUUlMjIpJTNCJTBBJTdEJTBBJTBB",
+"normalized":"somefile.js?line_start=2&line_end=5",
+      "main_directory": "/mnt/c/Users/spiro/D/snotes/lit_files/test_files"
+    },
+    {
+      "directory": "../",
+      "file": "node_lit.js",
+      "line_start": "20",
+      "line_end": "30",
+      "base64": "JTIwJTIwJTIwJTIwX3BhdGglM0ElMjBudWxsJTJDJTBBJTIwJTIwJTIwJTIwZmlsZSUzQSUyMGZ1bmN0aW9uJTIwKCklMjAlN0IlMEElMjAlMjAlMjAlMjAlMjAlMjAlMjAlMjByZXR1cm4lMjAoKHRoaXMuX3BhdGgpJTIwJTNGJTIwdGhpcy5fcGF0aCUyMCUyQiUyMFVUSUxTLm9zU2xhc2goKSUyMCUzQSUyMCUyMiUyMiklMjAlMkIlMjB0aGlzLl9maWxlJTNCJTBBJTIwJTIwJTIwJTIwJTdEJTBBJTdEJTNCJTBBJTBBZm9yJTIwKHZhciUyMGFyZ0klMjAlM0QlMjAyJTNCJTIwYXJnSSUyMCUzQyUyMHByb2Nlc3MuYXJndi5sZW5ndGglM0IlMjAlMkIlMkJhcmdJKSUyMCU3QiUwQSUyMCUyMCUyMCUyMGlmJTIwKHByb2Nlc3MuYXJndiU1QmFyZ0klNUQubWF0Y2goJTJGLS1maWxlJTJGZ20pKSUyMCU3QiUwQSUyMCUyMCUyMCUyMCUyMCUyMCUyMCUyMHZhciUyMGN1c3RvbUFyZ3VtZW50JTIwJTNEJTIwcHJvY2Vzcy5hcmd2JTVCYXJnSSU1RCUzQiUwQSUyMCUyMCUyMCUyMCUyMCUyMCUyMCUyMGN1c3RvbUFyZ3VtZW50JTIwJTNEJTIwY3VzdG9tQXJndW1lbnQuc3BsaXQoJTIyJTNEJTIyKSUzQiUwQSUyMCUyMCUyMCUyMCUyMCUyMCUyMCUyMGJ1aWxkLl9maWxlJTIwJTNEJTIwY3VzdG9tQXJndW1lbnQlNUIxJTVEJTNCJTBB",
+      "normalized": "node_lit.js?line_start=20&line_end=30directory=../",
+      "main_directory": "/mnt/c/Users/spiro/D/snotes/lit_files/test_files"
+    },
+    {
+      "file": "somefile.js",
+      "line_start": "2",
+      "line_end": "5",
+      "base64": "aWYlMjAoYWJjJTIwJTNEJTNEJTNEJTIwdHJ1ZSklMjAlN0IlMEElMjAlMjAlMjAlMjBjb25zb2xlLmxvZyglMjJBQkMlMjBJUyUyMFRSVUUlMjIpJTNCJTBBJTdEJTBBJTBB",
+      "normalized": "somefile.js?line_start=2&line_end=5"
+    }
+  ]
 }

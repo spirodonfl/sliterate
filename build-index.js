@@ -8,8 +8,6 @@ function readFile(file) {
     return fs.readFileSync(file, { encoding: "utf8" });
 }
 
-// TODO: Would be better if you could just parse the tags inside the HTML files like <script src=".."></script> instead of managing everything here
-
 var css = {
     mediaVars: "css/css-media-vars.css",
     lit: "css/lit.css",
@@ -42,6 +40,7 @@ var js = {
     litUi: "js/lit-ui.js",
     regexes: "js/regexes.js",
     marked: "js/marked.umd.js",
+    svg: "js/svg.js",
 };
 
 // Note: Double slashing so the regex is parsed correctly
@@ -88,7 +87,6 @@ var postfix = "\\s\\}\\}\\}";
  *   val,
  */
 
-// TODO: index.html
 var wrapper = readFile("html/index.tpl.html");
 
 for (var item in html) {

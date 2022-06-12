@@ -1,79 +1,96 @@
-// TODO: Named variables. Usage would be (approximately something like) below:
-// [lit_file](lit?variable=namedVariable)
-// [lit_file_meta]:somefile.js?line_start=20&line_end=32&name=namedVariable
-// TODO: Move todos to README or TODO.md
-// TODO: Reference other lit parsed files like this [lit_reference](/path/to/file.md) which should linkaway to appropriate online version and autoloaded
-// TODO: chalkboard
-// TODO: "Save Meta Only" button (offline only)
-// TODO: "Save Source" button (offline only)
-// TODO: Move common parse functionality in node_lit and node_lit_server to common class
-// TODO: Make sure that the regexes don't prematurely make a match WHILE YOU ARE TYPING
-// TODO: If there are references to other files inside a loaded markdown file then apply a directory path reference to the rendered link so you can actually click on the link and go to the file. Example: if you reference ./somefile.pdf then add http://localhost:8000/open?file=somefile.pdf&directory=/some/directory and node_lit_server will go reach out and pull the file and open it for you
-// TODO: Because offline mode & online mode got complicated, you now need to check (in offline mode) for two new parameters in the URL which are "port" and "host". This way, if you load an offline version but want to make requests to a running server, you can do so by going "index.html?port=9000&host=192.133.333.333". Use "window.location.protocol" to determine whether you're on "http" or "file" which tells you a local load or not
-// TODO: Would be good to display things like file and directory on the page so you know what you're working with
-// TODO: Allow online/server mode to update lit meta file records and notify you when metas are out of date (base64 compares). Probably best to do that server side and ship you the updated base64
-// TODO: Pull in raw.js and raw.html as an alternative mode to markdown mode
-// TODO: Allow editing of pulled in file meta and save the edits back to the file (good use of webcomponent?). Note that, if you do this, every other reference to the same file you just edited has to be updated. Also, pick and choose which references to update
-// For the above, what you have to do is prepend a link to the file in "raw" mode so you can go edit it
-// Why this choice and not inline editing? Inline editing means overtaking the entire UI and going into raw mode and saving the existing state and then jumping back after a save has been done and then forcing an update
-// What you could do is put a link above the file and have an "edit" option next to it and when you click a contenteditable thing pops up right below with highlightjs and a save button and save saves the local object and then you can force the update to the remote
-// TODO: Ideally, online mode has no dependency on locally storing base64 objects and can depend on the server to do the heavy work, updating constantly
-// TODO: Add an "ignore" option so you can just have a proper link to a file
-// TODO: Force metadata into its own file. Easier to manage and keeps main file cleaner.
-
 function requestFileResolution(litFile) {
     console.log("Requesting file:", litFile);
-    var params = {
-        main_directory: litMainDirectory,
-        file: litFile.file,
-    };
-    if (litFile.directory !== null) {
-        params.directory = litFile.directory;
-    }
-    if (litFile.line_start !== null && litFile.line_end !== null) {
-        params.line_start = litFile.line_start;
-        params.line_end = litFile.line_end;
-    }
-    var urlParams = new URLSearchParams(params);
-    fetch("/lit?" + urlParams, {
-        method: "get",
-        headers: {
-            "Accept": "*"
+    if (litFile.file !== null) {
+        var params = {
+            main_directory: litMainDirectory,
+            file: litFile.file,
+        };
+        if (litFile.directory !== null) {
+            params.directory = litFile.directory;
         }
-    }).then(function (response) {
-        if (response.ok) {
-            return response.text();
-        } else {
-            return Promise.reject(response);
-        }
-    }).then(function (base64Body) {
-        var newMeta = {};
-        var queryParams = [];
-        if (litFile.directory) {
-            newMeta.directory = litFile.directory;
-            queryParams.push("directory=" + litFile.directory);
-        }
-        if (litFile.file) {
-            newMeta.file = litFile.file;
-            queryParams.push("file=" + litFile.file);
-        }
-        if (litFile.line_start) {
-            newMeta.line_start = litFile.line_start;
-            queryParams.push("line_start=" + litFile.line_start);
-        }
-        if (litFile.line_end) {
-            newMeta.line_end = litFile.line_end;
-            queryParams.push("line_end=" + litFile.line_end);
-        }
-        newMeta.base64 = base64Body;
-        queryParams.push("base64=" + base64Body);
-        newMeta.normalized = normalizeLitFileRecord(newMeta);
-        litMeta.push(newMeta);
+        if (litFile.line_start !== null && litFile.line_end !== null && parseInt(litFile.line_end) >= parseInt(litFile.line_start)) {
+            params.line_start = litFile.line_start;
+            params.line_end = litFile.line_end;
+            var urlParams = new URLSearchParams(params);
+            fetch("/lit?" + urlParams, {
+                method: "get",
+                headers: {
+                    "Accept": "*"
+                }
+            }).then(function (response) {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    return Promise.reject(response);
+                }
+            }).then(function (base64Body) {
+                var newMeta = {};
+                var queryParams = [];
+                if (litFile.directory) {
+                    newMeta.directory = litFile.directory;
+                    queryParams.push("directory=" + litFile.directory);
+                }
+                if (litFile.file) {
+                    newMeta.file = litFile.file;
+                    queryParams.push("file=" + litFile.file);
+                }
+                if (litFile.line_start) {
+                    newMeta.line_start = litFile.line_start;
+                    queryParams.push("line_start=" + litFile.line_start);
+                }
+                if (litFile.line_end) {
+                    newMeta.line_end = litFile.line_end;
+                    queryParams.push("line_end=" + litFile.line_end);
+                }
+                newMeta.base64 = base64Body;
+                queryParams.push("base64=" + base64Body);
+                newMeta.normalized = normalizeLitFileRecord(newMeta);
+                litMeta.push(newMeta);
 
-        fileResolutionCompleted();
-    }).catch(function (error) {
-        console.error(error);
-    });
+                fileResolutionCompleted();
+            }).catch(function (error) {
+                console.error(error);
+            });
+        } else if (litFile.lit_tag) {
+            params.lit_tag = litFile.lit_tag;
+            var urlParams = new URLSearchParams(params);
+            fetch("/lit?" + urlParams, {
+                method: "get",
+                headers: {
+                    "Accept": "*"
+                }
+            }).then(function (response) {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    return Promise.reject(response);
+                }
+            }).then(function (base64Body) {
+                var newMeta = {};
+                var queryParams = [];
+                if (litFile.directory) {
+                    newMeta.directory = litFile.directory;
+                    queryParams.push("directory=" + litFile.directory);
+                }
+                if (litFile.file) {
+                    newMeta.file = litFile.file;
+                    queryParams.push("file=" + litFile.file);
+                }
+                if (litFile.lit_tag) {
+                    newMeta.lit_tag = litFile.lit_tag;
+                    queryParams.push("lit_tag=" + litFile.lit_tag);
+                }
+                newMeta.base64 = base64Body;
+                queryParams.push("base64=" + base64Body);
+                newMeta.normalized = normalizeLitFileRecord(newMeta);
+                litMeta.push(newMeta);
+
+                fileResolutionCompleted();
+            }).catch(function (error) {
+                console.error(error);
+            });
+        }
+    }
 }
 
 function requestFileCheck(litFile) {
@@ -88,6 +105,9 @@ function requestFileCheck(litFile) {
     if (litFile.line_start !== null && litFile.line_end !== null) {
         params.line_start = litFile.line_start;
         params.line_end = litFile.line_end;
+    }
+    if (litFile.lit_tag !== null) {
+        params.lit_tag = litFile.lit_tag;
     }
     var urlParams = new URLSearchParams(params);
     fetch("/lit?" + urlParams, {
@@ -127,6 +147,9 @@ function requestForceFileUpdate(litFile) {
         params.line_start = litFile.line_start;
         params.line_end = litFile.line_end;
     }
+    if (litFile.lit_tag) {
+        params.lit_tag = litFile.lit_tag;
+    }
     var urlParams = new URLSearchParams(params);
     fetch("/lit?" + urlParams, {
         method: "get",
@@ -148,8 +171,12 @@ function requestForceFileUpdate(litFile) {
                 var queryParams = [];
                 queryParams.push("file=" + meta.file);
                 queryParams.push("directory=" + meta.directory);
-                queryParams.push("line_start=" + meta.line_start);
-                queryParams.push("line_end=" + meta.line_end);
+                if (meta.line_start && meta.line_end) {
+                    queryParams.push("line_start=" + meta.line_start);
+                    queryParams.push("line_end=" + meta.line_end);
+                } else if (meta.lit_tag) {
+                    queryParams.push("lit_tag=" + meta.lit_tag);
+                }
                 queryParams.push("base64=" + meta.base64);
                 // TODO: This is awkward. Are we sure this is the only way?
                 // TODO: This makes the textarea lose focus and breaks ability to type continuously
@@ -167,7 +194,7 @@ function requestForceFileUpdate(litFile) {
 function requestFile(litFile) {
     console.log("Requesting file:", litFile);
     var params = {
-        file: litFile.file,
+        file: litFile.file + ".meta.json",
     };
     if (litFile.directory !== null) {
         params.directory = litFile.directory;
@@ -185,10 +212,61 @@ function requestFile(litFile) {
             return Promise.reject(response);
         }
     }).then(function (rawFile) {
-        document.getElementById("markdown_source").value = rawFile;
-        updateMarkdown();
+        var metaJson = JSON.parse(rawFile);
+        litMeta = metaJson.file_metas;
+        litMainDirectory = metaJson.main_directory;
+        console.log("Requesting file:", litFile);
+        var params = {
+            file: litFile.file,
+        };
+        if (litFile.directory !== null) {
+            params.directory = litFile.directory;
+        }
+        var urlParams = new URLSearchParams(params);
+        fetch("/raw?" + urlParams, {
+            method: "get",
+            headers: {
+                "Accept": "*"
+            }
+        }).then(function (response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return Promise.reject(response);
+            }
+        }).then(function (rawFile) {
+            document.getElementById("markdown_source").value = rawFile;
+            updateMarkdown();
+        }).catch(function (error) {
+            console.error(error);
+        });
     }).catch(function (error) {
         console.error(error);
+        console.log("Requesting file:", litFile);
+        var params = {
+            file: litFile.file,
+        };
+        if (litFile.directory !== null) {
+            params.directory = litFile.directory;
+        }
+        var urlParams = new URLSearchParams(params);
+        fetch("/raw?" + urlParams, {
+            method: "get",
+            headers: {
+                "Accept": "*"
+            }
+        }).then(function (response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return Promise.reject(response);
+            }
+        }).then(function (rawFile) {
+            document.getElementById("markdown_source").value = rawFile;
+            updateMarkdown();
+        }).catch(function (error) {
+            console.error(error);
+        });
     });
 }
 
@@ -206,6 +284,9 @@ function saveFile(fileData, body, callback) {
     if (fileData.line_start && fileData.line_end) {
         postParams.line_start = fileData.line_start;
         postParams.line_end = fileData.line_end;
+    }
+    if (fileData.lit_tag) {
+        postParams.lit_tag = fileData.lit_tag;
     }
     if ((typeof body === "undefined" || body === null) && fileData.base64) {
         body = fileData.base64;
@@ -239,6 +320,7 @@ function LIT_FILE_RECORD() {
         directory: null,
         line_start: null,
         line_end: null,
+        lit_tag: null,
         matched: null,
         normalized: null,
         lines: [],
@@ -251,6 +333,7 @@ function LIT_FILE_META_RECORD() {
         directory: null,
         line_start: null,
         line_end: null,
+        lit_tag: null,
         base64: null,
         base64mismatch: null,
         normalized: null,
@@ -264,6 +347,7 @@ function normalizeLitFileRecord(lfr) {
     normalized += lfr.file;
     if (
         (lfr.line_start && lfr.line_end) ||
+        lfr.lit_tag ||
         lfr.directory
     ) {
         normalized += "?";
@@ -271,8 +355,11 @@ function normalizeLitFileRecord(lfr) {
     if (lfr.line_start && lfr.line_end) {
         normalized += "line_start=" + lfr.line_start + "&line_end=" + lfr.line_end;
     }
+    if (lfr.lit_tag) {
+        normalized += "lit_tag=" + lfr.lit_tag;
+    }
     if (lfr.directory) {
-        normalized += "directory=" + lfr.directory;
+        normalized += "&directory=" + lfr.directory;
     }
 
     return normalized;
@@ -433,6 +520,7 @@ function updateMarkdown() {
         alert("Need regexes to work!");
     } else {
         var markdownText = document.getElementById("markdown_source").value;
+        missingFileMetas = [];
         extractFromSource(markdownText);
         if (missingFileMetas.length > 0) {
             totalFilesResolved = 0;
@@ -526,16 +614,48 @@ function handleEvent(eventType, element) {
             meta.base64 = element.data.base64;
             saveFile(element.data, null, updateMarkdown);
         }
+    } else if (eventType === "mouseover") {
+        if (element.matches("#menu_file")) {
+            hideSubmenus();
+            element.nextSibling.nextSibling.classList.toggle("hidden");
+        }
+        if (element.matches("#menu_view")) {
+            hideSubmenus();
+            element.nextSibling.nextSibling.classList.toggle("hidden");
+        }
+        if (element.matches("#menu_edit")) {
+            hideSubmenus();
+            element.nextSibling.nextSibling.classList.toggle("hidden");
+        }
+        if (element.matches("#markdown")) {
+            hideSubmenus();
+        }
+    } else if (eventType === "mouseout") {
+        // console.log("mouseout");
     }
 }
 
+function hideSubmenus() {
+    var submenuWrappers = document.querySelectorAll(".submenu-wrapper");
+    for (var s = 0; s < submenuWrappers.length; ++s) {
+        if (submenuWrappers[s] instanceof HTMLElement) {
+            if (!submenuWrappers[s].classList.contains("hidden")) {
+                submenuWrappers[s].classList.add("hidden");
+            }
+        }
+    }
+}
+
+var waitForIt = false;
 function handleKeyUp(element) {
     if (element.matches("#markdown_source")) {
-        updateMarkdown();
+        clearTimeout(waitForIt);
+        waitForIt = setTimeout(updateMarkdown, 1200);
     }
 }
 
 function handleClick(element) {
+    hideSubmenus();
     if (element.matches("#show_only_source")) {
         // TODO: Can we make this a class instead?
         document.getElementById("markdown").style.gridTemplateColumns = "100% 0px";
@@ -621,6 +741,10 @@ window.addEventListener("load", function () {
     document.addEventListener("change", iterateComposedPath, true);
 
     document.addEventListener("saveFile", iterateComposedPath, true);
+
+    document.addEventListener("mouseover", iterateComposedPath);
+
+    document.addEventListener("mouseout", iterateComposedPath);
 
     if (params.file) {
         var req = {};
