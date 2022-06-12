@@ -6,18 +6,14 @@
 [lit_file](node_lit_server.js?directory=.&lit_tag=move_to_commonFunction)
 ```
 
-- Lit tags work! However, when you have the same tag multiple times in a single file, it only picks up the first tag
 - Need to implement API to save metadata file without having to download it (so it saves next to currently loaded MD file)
 - When you click "Save File" the UI should
   - show you a status of the save as it progresses
-  - automatically hide the popup menu
 - When you click the "Load File" the UI should automatically hide the popup menu
 - Same as above for both the "Save Metadata" and the "Load Metadata"
 - Any clicks to any of the menu items in "View" and "Edit" should automatically hide the popup
 - The "Download Metadata" link needs some sprucing up but you have to think about how/what you would do
 - For "build_index.js", it would be better if you could just parse attributes of the various tags you are referencing like \<script src="...">\</script> and grab the src, then you could re-reference those in the builder and extract the contents of the referenced file and put it inline in the "single" version
-- It would be better if, at least on the server/online version, you autoloaded the meta file along with the MD file you are trying to load and also do the same when you save, that way you save the step of having to manually load the stuff
-  - Wait, aren't we already doing this? Confirm
 - It would be nice if you could deactivate certain menu items when the state of the application is not ready to handle those interactions which would help guide the user as to what their next steps should be
 - We have the means to regex/parse out tags but what does actually implementing them look like?
   - In a large MD file, the ability to search through the file by searching tags is a useful tool
